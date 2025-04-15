@@ -77,7 +77,7 @@
     <script>
         let elevador = document.getElementById("elevador");
         let estadoAtual = 0;  // Estado inicial é o térreo (S0)
-        let portasAbertas = false; // Flag para verificar se as portas estão abertas
+        let portasAbertas = false;
         let emMovimento = false; // Flag para verificar se o elevador está em movimento ou animando
         const leftDoor = document.querySelector('.door.left');
         const rightDoor = document.querySelector('.door.right');
@@ -85,8 +85,13 @@
     
         // Função para mover o elevador com base na ação
         function moverElevador(acao) {
-            if (emMovimento || portasAbertas) {
-                return; // Não faz nada se o elevador estiver em movimento ou com as portas abertas
+            if (portasAbertas) {
+                alert("O elevador não pode se mover com as portas abertas!"); // Exibe a mensagem
+                return; // Não faz nada se as portas estiverem abertas
+            }
+    
+            if (emMovimento) {
+                return; // Não faz nada se o elevador estiver em movimento
             }
     
             if (acao === 'subir' && estadoAtual < 3) {
