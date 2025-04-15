@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulação de Elevador - AFD</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #elevador {
+            width: 50px;
+            height: 50px;
+            background-color: #3498db;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 0;
+            transition: bottom 2s;
+            overflow: hidden;
+        }
+
+        .door {
+            width: 25px;
+            height: 100%;
+            background-color: gray;
+            position: absolute;
+            transition: transform 1s;
+        }
+
+        .door.left {
+            left: 0;
+        }
+
+        .door.right {
+            right: 0;
+        }
+
+        .door.open.left {
+            transform: translateX(-100%);
+        }
+
+        .door.open.right {
+            transform: translateX(100%);
+        }
+
+        .andar {
+            width: 100%;
+            height: 100px;
+            border: 1px solid #000;
+            position: absolute;
+        }
+
+        #andar0 { bottom: 0; }
+        #andar1 { bottom: 100px; }
+        #andar2 { bottom: 200px; }
+        #andar3 { bottom: 300px; }
+    </style>
+</head>
+<body>
+
+    <div id="elevador">
+        <div class="door left"></div>
+        <div class="door right"></div>
+    </div>
+    <div id="andar0" class="andar">Térreo</div>
+    <div id="andar1" class="andar">Andar 1</div>
+    <div id="andar2" class="andar">Andar 2</div>
+    <div id="andar3" class="andar">Andar 3</div>
+
+    <button onclick="moverElevador('subir')">Subir</button>
+    <button onclick="moverElevador('descer')">Descer</button>
+    <button onclick="abrirPortas()">Abrir Portas</button>
+    <button onclick="fecharPortas()">Fechar Portas</button>
+
+    <script>
+        let elevador = document.getElementById("elevador");
+        let estadoAtual = 0;  // Estado inicial é o térreo (S0)
+        let portasAbertas = false; // Flag para verificar se as portas estão abertas
+        let emMovimento = false; // Flag para verificar se o elevador está em movimento ou animando
+        const leftDoor = document.querySelector('.door.left');
+        const rightDoor = document.querySelector('.door.right');
+    
+        // Função para mover o elevador com base na ação
+        function moverElevador(acao) {
+            if (portasAbertas) {
+                alert("As portas estão abertas! Feche as portas antes de mover o elevador.");
+                return;
+            }
+    
+            if (emMovimento) {
+                alert("O elevador está em movimento ou animando. Aguarde.");
+                return;
+            }
+    
+            if (acao === 'subir' && estadoAtual < 3) {
+                estadoAtual++;
+                atualizarElevador();
+            } else if (acao === 'descer' && estadoAtual > 0) {
+                estadoAtual--;
+                atualizarElevador();
+            }
+        }
+    
+        // Função para abrir as portas
+        function abrirPortas() {
+            if (!portasAbertas) {
+                portasAbertas = true;
+                leftDoor.classList.add('open');
+                rightDoor.classList.add('open');
+            }
+        }
+    
+        // Função para fechar as portas
+        function fecharPortas() {
+            if (portasAbertas) {
+                portasAbertas = false;
+                leftDoor.classList.remove('open');
+                rightDoor.classList.remove('open');
+            }
+        }
+    
+        // Função para atualizar a posição do elevador
+        function atualizarElevador() {
+            emMovimento = true; // Bloqueia novas ações enquanto o elevador está em movimento
+            let posicoes = [0, 100, 200, 300]; // Posições para cada andar
+            elevador.style.bottom = posicoes[estadoAtual] + "px";
+    
+            // Abrir portas automaticamente ao chegar no andar
+            setTimeout(() => {
+                abrirPortas();
+                setTimeout(() => {
+                    fecharPortas();
+                    emMovimento = false; // Libera novas ações após o fechamento das portas
+                }, 3000); // Tempo para fechar as portas (3 segundos)
+            }, 2000); // Tempo para abrir as portas após o movimento (2 segundos)
+        }
+    </script>
+    
+</body>
+</html>
