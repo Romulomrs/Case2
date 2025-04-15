@@ -81,17 +81,12 @@
         let emMovimento = false; // Flag para verificar se o elevador está em movimento ou animando
         const leftDoor = document.querySelector('.door.left');
         const rightDoor = document.querySelector('.door.right');
+        const botoes = document.querySelectorAll("button"); // Seleciona todos os botões
     
         // Função para mover o elevador com base na ação
         function moverElevador(acao) {
-            if (portasAbertas) {
-                alert("As portas estão abertas! Feche as portas antes de mover o elevador.");
-                return;
-            }
-    
-            if (emMovimento) {
-                alert("O elevador está em movimento ou animando. Aguarde.");
-                return;
+            if (emMovimento || portasAbertas) {
+                return; // Não faz nada se o elevador estiver em movimento ou com as portas abertas
             }
     
             if (acao === 'subir' && estadoAtual < 3) {
@@ -124,6 +119,7 @@
         // Função para atualizar a posição do elevador
         function atualizarElevador() {
             emMovimento = true; // Bloqueia novas ações enquanto o elevador está em movimento
+            toggleBotoes(false); // Desativa os botões
             let posicoes = [0, 100, 200, 300]; // Posições para cada andar
             elevador.style.bottom = posicoes[estadoAtual] + "px";
     
@@ -133,8 +129,16 @@
                 setTimeout(() => {
                     fecharPortas();
                     emMovimento = false; // Libera novas ações após o fechamento das portas
+                    toggleBotoes(true); // Reativa os botões
                 }, 3000); // Tempo para fechar as portas (3 segundos)
             }, 2000); // Tempo para abrir as portas após o movimento (2 segundos)
+        }
+    
+        // Função para ativar/desativar os botões
+        function toggleBotoes(estado) {
+            botoes.forEach(botao => {
+                botao.disabled = !estado; // Desativa ou ativa os botões
+            });
         }
     </script>
     
