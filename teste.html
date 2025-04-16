@@ -9,16 +9,14 @@
             font-family: Arial, sans-serif;
         }
 
-        #elevador {
+        .elevador {
             width: 50px;
             height: 50px;
             background-color: #3498db;
             position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
+            left: 47%;
             bottom: 0;
             transition: bottom 2s;
-            overflow: hidden;
         }
 
         .door {
@@ -26,7 +24,7 @@
             height: 100%;
             background-color: gray;
             position: absolute;
-            transition: transform 1s;
+            transition: transform 1s ease-in-out; /* animação mais fluida */
         }
 
         .door.left {
@@ -46,105 +44,241 @@
         }
 
         .andar {
-            width: 100%;
+            width: 50%;
             height: 100px;
             border: 1px solid #000;
             position: absolute;
+            left: 25%;
         }
 
         #andar0 { bottom: 0; }
         #andar1 { bottom: 100px; }
         #andar2 { bottom: 200px; }
         #andar3 { bottom: 300px; }
+        #quadrado {
+            width: 25%; /* Tamanho do quadrado */
+            height: 67.6%; /* Tamanho do quadrado */
+            background-color: #bdc3c7; /* Cor cinza */
+            position: absolute;
+            right: 0; /* Posiciona à direita da tela */
+            top: 66%; /* Alinha verticalmente ao centro */
+            transform: translateY(-50%); /* Centraliza verticalmente */
+}
+/* Estilo comum para todos os botões */
+.btn {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+/* Estilo específico para o botão "Ir para o Térreo" */
+#btnIrTerreo {
+    background-color: #3498db;
+    color: white;
+    position:absolute;
+    left:80%;
+    top: 40%;
+}
+
+#btnIrTerreo:hover {
+    background-color: #2980b9;
+    transform: scale(1.1);
+}
+
+/* Estilo específico para o botão "Ir para o Andar 1" */
+#btnIrAndar1 {
+    background-color: #2ecc71;
+    color: white;
+}
+
+#btnIrAndar1:hover {
+    background-color: #27ae60;
+    transform: scale(1.1);
+}
+
+/* Estilo específico para o botão "Ir para o Andar 2" */
+#btnIrAndar2 {
+    background-color: #f39c12;
+    color: white;
+}
+
+#btnIrAndar2:hover {
+    background-color: #e67e22;
+    transform: scale(1.1);
+}
+
+/* Estilo específico para o botão "Ir para o Andar 3" */
+#btnIrAndar3 {
+    background-color: #e74c3c;
+    color: white;
+}
+
+#btnIrAndar3:hover {
+    background-color: #c0392b;
+    transform: scale(1.1);
+}
+
+/* Estilo específico para o botão "Abrir Portas" */
+#btnAbrirPortas {
+    background-color: #9b59b6;
+    color: white;
+}
+
+#btnAbrirPortas:hover {
+    background-color: #8e44ad;
+    transform: scale(1.1);
+}
+
+/* Estilo específico para o botão "Fechar Portas" */
+#btnFecharPortas {
+    background-color: #34495e;
+    color: white;
+}
+
+#btnFecharPortas:hover {
+    background-color: #2c3e50;
+    transform: scale(1.1);
+}
+
+
+
     </style>
 </head>
 <body>
-
-    <div id="elevador">
+    <!-- Elevador -->
+    <div id="elevador" class="elevador">
         <div class="door left"></div>
         <div class="door right"></div>
     </div>
-    <div id="andar0" class="andar">Térreo</div>
-    <div id="andar1" class="andar">Andar 1</div>
-    <div id="andar2" class="andar">Andar 2</div>
-    <div id="andar3" class="andar">Andar 3</div>
+    <div id="quadrado"></div>
 
-    <button onclick="moverElevador('subir')">Subir</button>
-    <button onclick="moverElevador('descer')">Descer</button>
-    <button onclick="abrirPortas()">Abrir Portas</button>
-    <button onclick="fecharPortas()">Fechar Portas</button>
+    <!-- Andares -->
+    <div id="andar0" class="andar">Térreo</div>
+    <div id="andar1" class="andar">1°Andar</div>
+    <div id="andar2" class="andar">2°Andar</div>
+    <div id="andar3" class="andar">3°Andar</div>
+
+
+
+
+    <!-- Controle do Elevador -->
+    <div>
+        <h3>Controle do Elevador</h3>
+
+        <!-- Botões para os andares com ID e classe -->
+        <button id="btnIrTerreo" class="btn" onclick="chamarElevador(0)">Térreo</button>
+        <button id="btnIrAndar1" class="btn" onclick="chamarElevador(1)">1°Andar</button>
+        <button id="btnIrAndar2" class="btn" onclick="chamarElevador(2)">2°Andar</button>
+        <button id="btnIrAndar3" class="btn" onclick="chamarElevador(3)">3°Andar</button>
+        
+        <br><br>
+        
+        <!-- Botões para abrir e fechar as portas com ID e classe -->
+        <button id="btnAbrirPortas" class="btn" onclick="abrirPortas()">Abrir Portas</button>
+        <button id="btnFecharPortas" class="btn" onclick="fecharPortas()">Fechar Portas</button>
+        
+    </div>
 
     <script>
-        let elevador = document.getElementById("elevador");
-        let estadoAtual = 0;  // Estado inicial é o térreo (S0)
-        let portasAbertas = false;
-        let emMovimento = false; // Flag para verificar se o elevador está em movimento ou animando
-        const leftDoor = document.querySelector('.door.left');
-        const rightDoor = document.querySelector('.door.right');
-        const botoes = document.querySelectorAll("button"); // Seleciona todos os botões
-    
-        // Função para mover o elevador com base na ação
-        function moverElevador(acao) {
-            if (portasAbertas) {
-                alert("O elevador não pode se mover com as portas abertas!"); // Exibe a mensagem
-                return; // Não faz nada se as portas estiverem abertas
-            }
-    
-            if (emMovimento) {
-                return; // Não faz nada se o elevador estiver em movimento
-            }
-    
-            if (acao === 'subir' && estadoAtual < 3) {
-                estadoAtual++;
-                atualizarElevador();
-            } else if (acao === 'descer' && estadoAtual > 0) {
-                estadoAtual--;
-                atualizarElevador();
-            }
-        }
-    
-        // Função para abrir as portas
-        function abrirPortas() {
-            if (!portasAbertas) {
-                portasAbertas = true;
-                leftDoor.classList.add('open');
-                rightDoor.classList.add('open');
-            }
-        }
-    
-        // Função para fechar as portas
-        function fecharPortas() {
-            if (portasAbertas) {
-                portasAbertas = false;
-                leftDoor.classList.remove('open');
-                rightDoor.classList.remove('open');
-            }
-        }
-    
-        // Função para atualizar a posição do elevador
-        function atualizarElevador() {
-            emMovimento = true; // Bloqueia novas ações enquanto o elevador está em movimento
-            toggleBotoes(false); // Desativa os botões
-            let posicoes = [0, 100, 200, 300]; // Posições para cada andar
-            elevador.style.bottom = posicoes[estadoAtual] + "px";
-    
-            // Abrir portas automaticamente ao chegar no andar
+let estadoAtual = 0;  // Estado inicial é o térreo (S0)
+let portasAbertas = false; // Flag para verificar se as portas estão abertas
+let emMovimento = false; // Flag para verificar se o elevador está em movimento ou animando
+const elevador = document.getElementById("elevador");
+const leftDoor = elevador.querySelector('.door.left');
+const rightDoor = elevador.querySelector('.door.right');
+const botoes = document.querySelectorAll("button"); // Seleciona todos os botões
+
+// Função para chamar o elevador para um andar específico
+function chamarElevador(destino) {
+    if (emMovimento || portasAbertas) {
+        alert("O elevador não pode se mover com as portas abertas!");
+        return;
+    }
+
+    if (destino < 0 || destino > 3) {
+        alert("Andar inválido!");
+        return;
+    }
+
+    if (estadoAtual === destino) {
+        abrirPortas();
+        setTimeout(() => fecharPortas(), 3000);
+        return;
+    }
+
+    estadoAtual = destino;
+    atualizarElevador();
+}
+
+// Função para mover o elevador com base na ação
+function moverElevador(acao) {
+    if (emMovimento || portasAbertas) {
+        alert("Feche as portas antes de mover o elevador.");
+        return;
+    }
+
+    if (acao === 'subir' && estadoAtual < 3) {
+        estadoAtual++;
+        atualizarElevador();
+    } else if (acao === 'descer' && estadoAtual > 0) {
+        estadoAtual--;
+        atualizarElevador();
+    }
+}
+
+// Função para abrir as portas
+function abrirPortas() {
+    if (!portasAbertas) {
+        portasAbertas = true;
+        leftDoor.classList.add('open');
+        rightDoor.classList.add('open');
+    }
+}
+
+// Função para fechar as portas
+function fecharPortas() {
+    if (portasAbertas) {
+        portasAbertas = false;
+        leftDoor.classList.remove('open');
+        rightDoor.classList.remove('open');
+    }
+}
+
+// Função para atualizar a posição do elevador
+function atualizarElevador() {
+    if (portasAbertas) {
+        console.warn("Movimento bloqueado: portas estão abertas.");
+        return;
+    }
+
+    emMovimento = true;
+    toggleBotoes(false);
+    let posicoes = [0, 100, 200, 300]; // Posições para cada andar
+    elevador.style.bottom = posicoes[estadoAtual] + "px";
+
+    setTimeout(() => {
+        abrirPortas();
+        setTimeout(() => {
+            fecharPortas();
             setTimeout(() => {
-                abrirPortas();
-                setTimeout(() => {
-                    fecharPortas();
-                    emMovimento = false; // Libera novas ações após o fechamento das portas
-                    toggleBotoes(true); // Reativa os botões
-                }, 3000); // Tempo para fechar as portas (3 segundos)
-            }, 2000); // Tempo para abrir as portas após o movimento (2 segundos)
-        }
-    
-        // Função para ativar/desativar os botões
-        function toggleBotoes(estado) {
-            botoes.forEach(botao => {
-                botao.disabled = !estado; // Desativa ou ativa os botões
-            });
-        }
+                emMovimento = false;
+                toggleBotoes(true);
+            }, 1000); // Espera a animação de fechar
+        }, 2000); // Tempo de portas abertas
+    }, 2000); // Espera o elevador chegar antes de abrir as portas
+}
+
+// Função para ativar/desativar os botões
+function toggleBotoes(estado) {
+    botoes.forEach(botao => {
+        botao.disabled = !estado;
+    });
+}
+
     </script>
     
 </body>
