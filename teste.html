@@ -207,8 +207,8 @@
 <button class="btn-chamada" onclick="chamarElevador(3)" style="position:absolute; left:53%; bottom: 320px; width: 15px;height: 15px;"></button>
 
     </div>
-    <div id="leitorAndar" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); font-size: 24px; font-weight: bold;">
-        Andar: Térreo
+    <div id="leitorAndar" style="position: absolute; top: 40%; left: 88%; transform: translateX(-50%); font-size: 24px; font-weight: bold;">
+Térreo
     </div>
 
     <script>
@@ -216,7 +216,7 @@
 
 function atualizarLeitor() {
     let nomes = ["Térreo", "1° Andar", "2° Andar", "3° Andar"];
-    leitorAndar.textContent = `Andar: ${nomes[estadoAtual]}`;
+    leitorAndar.textContent = ` ${nomes[estadoAtual]}`;
 }
 
 let estadoAtual = 0;  // Estado inicial é o térreo (S0)
