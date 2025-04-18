@@ -80,8 +80,8 @@
     background-color: #3498db;
     color: white;
     position:absolute;
-    left:80%;
-    top: 40%;
+    left:86%;
+    top: 70%;
 }
 
 #btnIrTerreo:hover {
@@ -93,6 +93,9 @@
 #btnIrAndar1 {
     background-color: #2ecc71;
     color: white;
+    position:absolute;
+    left:80%;
+    top: 60%;
 }
 
 #btnIrAndar1:hover {
@@ -104,6 +107,9 @@
 #btnIrAndar2 {
     background-color: #f39c12;
     color: white;
+    position:absolute;
+    left:86%;
+    top: 60%;
 }
 
 #btnIrAndar2:hover {
@@ -115,6 +121,9 @@
 #btnIrAndar3 {
     background-color: #e74c3c;
     color: white;
+    position:absolute;
+    left:91%;
+    top: 60%;
 }
 
 #btnIrAndar3:hover {
@@ -126,6 +135,9 @@
 #btnAbrirPortas {
     background-color: #9b59b6;
     color: white;
+    position:absolute;
+    left:80%;
+    top: 80%;
 }
 
 #btnAbrirPortas:hover {
@@ -137,6 +149,9 @@
 #btnFecharPortas {
     background-color: #34495e;
     color: white;
+    position:absolute;
+    left:91%;
+    top: 80%;
 }
 
 #btnFecharPortas:hover {
@@ -167,19 +182,18 @@
 
     <!-- Controle do Elevador -->
     <div>
-        <h3>Controle do Elevador</h3>
 
         <!-- Botões para os andares com ID e classe -->
-        <button id="btnIrTerreo" class="btn" onclick="chamarElevador(0)">Térreo</button>
-        <button id="btnIrAndar1" class="btn" onclick="chamarElevador(1)">1°Andar</button>
-        <button id="btnIrAndar2" class="btn" onclick="chamarElevador(2)">2°Andar</button>
-        <button id="btnIrAndar3" class="btn" onclick="chamarElevador(3)">3°Andar</button>
+        <button id="btnIrTerreo" class="btn" onclick="chamarElevador(0)">T</button>
+        <button id="btnIrAndar1" class="btn" onclick="chamarElevador(1)">1°</button>
+        <button id="btnIrAndar2" class="btn" onclick="chamarElevador(2)">2°</button>
+        <button id="btnIrAndar3" class="btn" onclick="chamarElevador(3)">3°</button>
         
         <br><br>
         
         <!-- Botões para abrir e fechar as portas com ID e classe -->
-        <button id="btnAbrirPortas" class="btn" onclick="abrirPortas()">Abrir Portas</button>
-        <button id="btnFecharPortas" class="btn" onclick="fecharPortas()">Fechar Portas</button>
+        <button id="btnAbrirPortas" class="btn" onclick="abrirPortas()"><></button>
+        <button id="btnFecharPortas" class="btn" onclick="fecharPortas()">><</button>
         
     </div>
 
@@ -230,12 +244,19 @@ function moverElevador(acao) {
     }
 }
 
+let autoFecharTimeout; // Variável para guardar o timeout de auto-fechamento
+
 // Função para abrir as portas
 function abrirPortas() {
     if (!portasAbertas) {
         portasAbertas = true;
         leftDoor.classList.add('open');
         rightDoor.classList.add('open');
+
+        // Inicia o timeout para fechamento automático em 5 segundos
+        autoFecharTimeout = setTimeout(() => {
+            fecharPortas();
+        }, 5000);
     }
 }
 
@@ -245,8 +266,12 @@ function fecharPortas() {
         portasAbertas = false;
         leftDoor.classList.remove('open');
         rightDoor.classList.remove('open');
+
+        // Cancela o timeout de auto-fechamento, se ainda estiver ativo
+        clearTimeout(autoFecharTimeout);
     }
 }
+
 
 // Função para atualizar a posição do elevador
 function atualizarElevador() {
